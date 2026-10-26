@@ -1,10 +1,10 @@
-# The Fleishman Equation
+# The Rogue–Misuse Decomposition
 
 An estimate of the chance that AI wipes out humanity, split into a rogue-AI path and a human-misuse path. Single-file, no-build web calculator.
 
 **Live:** https://leofle.github.io/fleishman-equation/
 
-**[Read the white paper (PDF)](https://leofle.github.io/fleishman-equation/fleishman-equation-whitepaper.pdf)**
+**[Read the white paper (PDF)](https://leofle.github.io/fleishman-equation/rogue-misuse-decomposition-whitepaper.pdf)**
 
 ```
 P(doom) = f_T · [1 − (1 − R) · (1 − S)] + (f_C − f_T) · S,   f_C ≥ f_T
@@ -25,6 +25,8 @@ Like the Drake equation, the structure is the useful part; the inputs are guesse
 ## Assumptions
 
 f_T is counted once (an earlier version multiplied it into both paths, double-counting it). The two paths are treated as independent once transformative AI exists, and S is assumed the same in worlds with and without transformative AI. In reality they can interact (e.g. a misused AI could also escape control), so this is a simplification. Path factors are implicitly averaged over the arrival time of the relevant capability within the time frame. Inputs are point values: the product of medians is in general not the median of the product.
+
+The repository and URL keep their original name (`fleishman-equation`), and the old PDF path `fleishman-equation-whitepaper.pdf` is kept as a copy so existing links still work.
 
 License: MIT
 
