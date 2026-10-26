@@ -5,12 +5,18 @@ A Drake-style estimate of the chance that AI wipes out humanity, split into a ro
 **Live:** https://leofle.github.io/fleishman-equation/
 
 ```
-P(doom)   = 1 − (1 − P(rogue)) · (1 − P(misuse))
-P(rogue)  = f_T · f_M · f_P · f_U · f_H · f_X
-P(misuse) = f_T · f_A · f_W · f_F
+P(doom) = f_T · [1 − (1 − R) · (1 − M)]
+R       = f_M · f_P · f_U · f_H · f_X   (rogue path, given powerful AI exists)
+M       = f_A · f_W · f_F               (misuse path, given powerful AI exists)
+
+Path contributions shown: P(rogue) = f_T · R, P(misuse) = f_T · M.
 ```
 
 Like the Drake equation, the structure is the useful part; the inputs are guesses. The Optimist/Middle/Pessimist presets are illustrative, not real estimates; research presets are listed below. Slider state is shareable via the query string.
+
+## Assumptions
+
+f_T is counted once (an earlier version multiplied it into both paths, double-counting it). The two paths are treated as independent once powerful AI exists. In reality they can interact (e.g. a misused AI could also escape control), so this is a simplification.
 
 License: MIT
 

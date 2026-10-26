@@ -21,9 +21,10 @@ h2{font-size:1.2rem;margin:0 0 6px}h3{font-size:1rem;margin:10px 0 0}
 <h1>The Fleishman Equation</h1>
 <p class="sub">A Drake-style estimate of the chance that AI wipes out humanity, split into a rogue-AI path and a human-misuse path.</p>
 <div class="card">
-<div class="eq">P(doom) = 1 − (1 − P(rogue)) · (1 − P(misuse))</div>
-<div class="eq">P(rogue) = f<sub>T</sub> · f<sub>M</sub> · f<sub>P</sub> · f<sub>U</sub> · f<sub>H</sub> · f<sub>X</sub></div>
-<div class="eq">P(misuse) = f<sub>T</sub> · f<sub>A</sub> · f<sub>W</sub> · f<sub>F</sub></div>
+<div class="eq">P(doom) = f<sub>T</sub> · [1 − (1 − R) · (1 − M)]</div>
+<div class="eq">R = f<sub>M</sub> · f<sub>P</sub> · f<sub>U</sub> · f<sub>H</sub> · f<sub>X</sub> &nbsp;(rogue path, given powerful AI exists)</div>
+<div class="eq">M = f<sub>A</sub> · f<sub>W</sub> · f<sub>F</sub> &nbsp;(misuse path, given powerful AI exists)</div>
+<div class="small">f<sub>T</sub> is counted once. Path contributions: P(rogue) = f<sub>T</sub>·R, P(misuse) = f<sub>T</sub>·M.</div>
 </div>
 <div class="card" id="res">
 <div class="small">P(doom)</div><div class="big" id="pd">–</div><div class="small" id="odds"></div>
@@ -37,6 +38,7 @@ P(misuse): <b id="pm" class="val"></b><div class="bar"><div id="bm"></div></div>
 <div class="btns"><button data-p="opt">Optimist</button><button data-p="mid">Middle</button><button data-p="pes">Pessimist</button><button data-p="mid" id="reset">Reset</button></div></div>
 <div class="card" id="src"><h2>Sources</h2><div id="srcbody"></div></div>
 <div class="card"><h2>Factors</h2><div id="shared"></div><div class="grid"><div><h3>Rogue-AI path</h3><div id="rogue"></div></div><div><h3>Human-misuse path</h3><div id="misuse"></div></div></div></div>
+<div class="card"><h2>Assumptions</h2><p>The two paths are treated as independent once powerful AI exists. In reality they can interact (for example, a misused AI could also escape control), so this is a simplification.</p></div>
 <div class="card"><h2>Where safety work pushes the numbers</h2><ul>
 <li><b>Alignment research</b> lowers f<sub>M</sub>.</li>
 <li><b>Oversight, interpretability, and shutdown mechanisms</b> lower f<sub>U</sub>.</li>
@@ -92,7 +94,7 @@ document.getElementById(g).appendChild(w);el[k]=w.querySelector("input");el[k].a
 function pct(p){const x=p*100;if(x>0&&x<0.01)return"<0.01%";if(x===0)return"0%";return(x<1?x.toFixed(2):x.toFixed(1))+"%";}
 function set(o){for(const k in o)el[k].value=o[k];upd(true);}
 function upd(url){const v={};for(const k in el){v[k]=+el[k].value;document.getElementById("v"+k).textContent=String(+v[k].toFixed(4));}
-const r=v.T*v.M*v.P*v.U*v.H*v.X,m=v.T*v.A*v.W*v.F,d=1-(1-r)*(1-m);
+const R=v.M*v.P*v.U*v.H*v.X,Mi=v.A*v.W*v.F,r=v.T*R,m=v.T*Mi,d=v.T*(1-(1-R)*(1-Mi));
 pd.textContent=pct(d);pr.textContent=pct(r);pm.textContent=pct(m);
 odds.textContent=d>0?"about 1 in "+Math.round(1/d).toLocaleString():"essentially zero";
 br.style.width=(r*100)+"%";bm.style.width=(m*100)+"%";
