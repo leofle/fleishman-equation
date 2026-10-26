@@ -1,0 +1,5 @@
+node_modules/
+paper.html
+*.pdf
+png/
+__pycache__/
