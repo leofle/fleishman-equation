@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Fleishman equation</title>
+<style>
+:root{--bg:#f7f7f9;--card:#fff;--fg:#1b1d23;--mut:#5d6370;--acc:#c0392b;--r:#8e44ad;--m:#d35400;--bd:#e2e4ea}
+@media (prefers-color-scheme:dark){:root{--bg:#111318;--card:#1b1e25;--fg:#e8e9ee;--mut:#9aa0ad;--acc:#ff6b5b;--r:#b57be0;--m:#ff9a4d;--bd:#2c3039}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:860px;margin:0 auto;padding:24px 16px 48px}h1{margin:0 0 4px;font-size:2rem}.sub{color:var(--mut);margin:0 0 20px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px 18px;margin:16px 0}
+.eq{font-family:"Cambria Math",Georgia,serif;font-size:1.1rem;margin:6px 0;overflow-x:auto;white-space:nowrap}
+.f{margin:14px 0}.f label{display:flex;justify-content:space-between;font-weight:600}.f p{margin:2px 0 4px;color:var(--mut);font-size:.9rem}
+input[type=range]{width:100%;accent-color:var(--acc)}.val{font-variant-numeric:tabular-nums}
+.btns button{font:inherit;padding:6px 12px;margin:4px 6px 4px 0;border-radius:8px;border:1px solid var(--bd);background:var(--bg);color:var(--fg);cursor:pointer}
+.btns button.on{border-color:var(--acc);color:var(--acc)}.small{color:var(--mut);font-size:.85rem}
+.big{font-size:3rem;font-weight:700;color:var(--acc);line-height:1.1}.bar{height:12px;background:var(--bd);border-radius:6px;overflow:hidden;margin:4px 0 10px}
+.bar div{height:100%}#br{background:var(--r)}#bm{background:var(--m)}
+#res{position:sticky;top:0;z-index:2}.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}@media(max-width:640px){.grid{grid-template-columns:1fr}.big{font-size:2.4rem}}
+h2{font-size:1.2rem;margin:0 0 6px}h3{font-size:1rem;margin:10px 0 0}
+</style></head><body><main>
+<h1>The Fleishman equation</h1>
+<p class="sub">A Drake-style estimate of the chance that AI wipes out humanity, split into a rogue-AI path and a human-misuse path.</p>
+<div class="card">
+<div class="eq">P(doom) = 1 − (1 − P(rogue)) · (1 − P(misuse))</div>
+<div class="eq">P(rogue) = f<sub>T</sub> · f<sub>M</sub> · f<sub>P</sub> · f<sub>U</sub> · f<sub>H</sub> · f<sub>X</sub></div>
+<div class="eq">P(misuse) = f<sub>T</sub> · f<sub>A</sub> · f<sub>W</sub> · f<sub>F</sub></div>
+</div>
+<div class="card" id="res">
+<div class="small">P(doom)</div><div class="big" id="pd">–</div><div class="small" id="odds"></div>
+<div style="margin-top:10px">P(rogue): <b id="pr" class="val"></b><div class="bar"><div id="br"></div></div>
+P(misuse): <b id="pm" class="val"></b><div class="bar"><div id="bm"></div></div></div>
+</div>
+<div class="card"><h2>Presets</h2><div class="small">Illustrative, not real estimates.</div>
+<div class="btns"><button data-p="opt">Optimist</button><button data-p="mid">Middle</button><button data-p="pes">Pessimist</button><button data-p="mid" id="reset">Reset</button></div></div>
+<div class="card"><h2>Factors</h2><div id="shared"></div><div class="grid"><div><h3>Rogue-AI path</h3><div id="rogue"></div></div><div><h3>Human-misuse path</h3><div id="misuse"></div></div></div></div>
+<div class="card"><h2>Where safety work pushes the numbers</h2><ul>
+<li><b>Alignment research</b> lowers f<sub>M</sub>.</li>
+<li><b>Oversight, interpretability, and shutdown mechanisms</b> lower f<sub>U</sub>.</li>
+<li><b>Compute governance and access controls</b> lower f<sub>P</sub> and f<sub>A</sub>.</li>
+<li><b>Biosecurity and AI-assisted defense</b> lower f<sub>W</sub> and f<sub>F</sub>.</li></ul></div>
+<p class="small">Like the Drake equation, the structure is the useful part; the inputs are guesses. The URL updates as you move sliders, so you can share your numbers.</p>
+</main><script>
+const F=[["T","shared","Chance we build AI that beats humans at most tasks, in the time frame you have in mind (shared)."],
+["M","rogue","Misalignment: its goals are at odds with human survival."],["P","rogue","It gets enough power to act (money, infrastructure, copies of itself, lab control)."],
+["U","rogue","Nobody catches or corrects it in time."],["H","rogue","Its plan actually requires getting rid of humans."],["X","rogue","The attempt causes extinction rather than a survivable disaster."],
+["A","misuse","A group wanting mass casualties gets powerful AI."],["W","misuse","The AI hands them a species-ending weapon, such as an engineered pandemic."],["F","misuse","Defenses fail (biosecurity, monitoring, counter-AI)."]];
+const PR={opt:{T:.5,M:.1,P:.2,U:.2,H:.3,X:.2,A:.05,W:.05,F:.1},mid:{T:.7,M:.3,P:.3,U:.4,H:.5,X:.3,A:.1,W:.1,F:.2},pes:{T:.9,M:.8,P:.6,U:.8,H:.7,X:.6,A:.3,W:.3,F:.4}};
+const el={};for(const[k,g,d]of F){const w=document.createElement("div");w.className="f";
+w.innerHTML=`<label for="f${k}"><span>f<sub>${k}</sub></span><span class="val" id="v${k}"></span></label><p>${d}</p><input type="range" id="f${k}" min="0" max="1" step="0.01">`;
+document.getElementById(g).appendChild(w);el[k]=w.querySelector("input");el[k].addEventListener("input",()=>upd(true));}
+function pct(p){const x=p*100;if(x>0&&x<0.01)return"<0.01%";if(x===0)return"0%";return(x<1?x.toFixed(2):x.toFixed(1))+"%";}
+function set(o){for(const k in o)el[k].value=o[k];upd(true);}
+function upd(url){const v={};for(const k in el){v[k]=+el[k].value;document.getElementById("v"+k).textContent=v[k].toFixed(2);}
+const r=v.T*v.M*v.P*v.U*v.H*v.X,m=v.T*v.A*v.W*v.F,d=1-(1-r)*(1-m);
+pd.textContent=pct(d);pr.textContent=pct(r);pm.textContent=pct(m);
+odds.textContent=d>0?"about 1 in "+Math.round(1/d).toLocaleString():"essentially zero";
+br.style.width=(r*100)+"%";bm.style.width=(m*100)+"%";
+document.querySelectorAll("[data-p]:not(#reset)").forEach(b=>b.classList.toggle("on",Object.keys(PR[b.dataset.p]).every(k=>Math.abs(PR[b.dataset.p][k]-v[k])<1e-9)));
+if(url)history.replaceState(null,"","?"+new URLSearchParams(Object.fromEntries(Object.entries(v).map(([k,x])=>[k,x]))));
+window.__res={r,m,d};}
+document.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>set(PR[b.dataset.p]));
+const q=new URLSearchParams(location.search),init={...PR.mid};for(const k in init){const x=parseFloat(q.get(k));if(!isNaN(x)&&x>=0&&x<=1)init[k]=x;}
+for(const k in init)el[k].value=init[k];upd(false);
+</script></body></html>
