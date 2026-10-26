@@ -10,7 +10,7 @@ P(rogue)  = f_T · f_M · f_P · f_U · f_H · f_X
 P(misuse) = f_T · f_A · f_W · f_F
 ```
 
-Like the Drake equation, the structure is the useful part; the inputs are guesses. Presets are illustrative, not real estimates. Slider state is shareable via the query string.
+Like the Drake equation, the structure is the useful part; the inputs are guesses. The Optimist/Middle/Pessimist presets are illustrative, not real estimates; research presets are listed below. Slider state is shareable via the query string.
 
 License: MIT
 
