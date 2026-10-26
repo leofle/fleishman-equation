@@ -20,11 +20,12 @@ h2{font-size:1.2rem;margin:0 0 6px}h3{font-size:1rem;margin:10px 0 0}
 </style></head><body><main>
 <h1>The Fleishman Equation</h1>
 <p class="sub">An estimate of the chance that AI wipes out humanity, split into a rogue-AI path and a human-misuse path.</p>
+<p style="margin:0 0 16px"><a href="fleishman-equation-whitepaper.pdf" style="display:inline-block;padding:8px 14px;border-radius:8px;background:var(--acc);color:#fff;font-weight:600;text-decoration:none">Read the white paper (PDF)</a></p>
 <div class="card">
-<div class="eq">P(doom) = f<sub>T</sub> · [1 − (1 − R) · (1 − M)]</div>
+<div class="eq">P(doom) = f<sub>T</sub> · [1 − (1 − R) · (1 − S)]</div>
 <div class="eq">R = f<sub>M</sub> · f<sub>P</sub> · f<sub>U</sub> · f<sub>H</sub> · f<sub>X</sub> &nbsp;(rogue path, given powerful AI exists)</div>
-<div class="eq">M = f<sub>A</sub> · f<sub>W</sub> · f<sub>F</sub> &nbsp;(misuse path, given powerful AI exists)</div>
-<div class="small">f<sub>T</sub> is counted once. Path contributions: P(rogue) = f<sub>T</sub>·R, P(misuse) = f<sub>T</sub>·M.</div>
+<div class="eq">S = f<sub>A</sub> · f<sub>W</sub> · f<sub>F</sub> &nbsp;(misuse path, given powerful AI exists)</div>
+<div class="small">P(doom) is the probability that AI causes human extinction within a stated time frame. f<sub>T</sub> is counted once. Path contributions: P(rogue) = f<sub>T</sub>·R, P(misuse) = f<sub>T</sub>·S.</div>
 </div>
 <div class="card" id="res">
 <div class="small">P(doom)</div><div class="big" id="pd">–</div><div class="small" id="odds"></div>
@@ -38,7 +39,7 @@ P(misuse): <b id="pm" class="val"></b><div class="bar"><div id="bm"></div></div>
 <div class="btns"><button data-p="opt">Optimist</button><button data-p="mid">Middle</button><button data-p="pes">Pessimist</button><button data-p="mid" id="reset">Reset</button></div></div>
 <div class="card" id="src"><h2>Sources</h2><div id="srcbody"></div></div>
 <div class="card"><h2>Factors</h2><div id="shared"></div><div class="grid"><div><h3>Rogue-AI path</h3><div id="rogue"></div></div><div><h3>Human-misuse path</h3><div id="misuse"></div></div></div></div>
-<div class="card"><h2>Assumptions</h2><p>The two paths are treated as independent once powerful AI exists. In reality they can interact (for example, a misused AI could also escape control), so this is a simplification.</p></div>
+<div class="card"><h2>Assumptions</h2><p>The two paths are treated as independent once powerful AI exists. In reality they can interact (for example, a misused AI could also escape control), so this is a simplification.</p><p>Path factors are implicitly averaged over when, within the time frame, powerful AI arrives; late arrival leaves little time for either path.</p><p>The calculator multiplies single values. If factors are uncertain, the product of their medians is in general not the median of the product.</p><p>The Grace et al. (2018) preset is conditional on HLMI existing (f<sub>T</sub> = 1), so it is not on the same scale as the other research presets. Per-factor values in total-only presets are artifacts of the equal-split mapping, not the respondents' forecasts.</p></div>
 <div class="card"><h2>Where safety work pushes the numbers</h2><ul>
 <li><b>Alignment research</b> lowers f<sub>M</sub>.</li>
 <li><b>Oversight, interpretability, and shutdown mechanisms</b> lower f<sub>U</sub>.</li>
@@ -46,10 +47,10 @@ P(misuse): <b id="pm" class="val"></b><div class="bar"><div id="bm"></div></div>
 <li><b>Biosecurity and AI-assisted defense</b> lower f<sub>W</sub> and f<sub>F</sub>.</li></ul></div>
 <p class="small">Like the Drake equation, the structure is the useful part; the inputs are guesses. Research presets reproduce the published totals; they do not mean the authors endorse our factor split. The URL updates as you move sliders, so you can share your numbers.</p>
 </main><script>
-const F=[["T","shared","Chance we build AI that beats humans at most tasks, in the time frame you have in mind (shared)."],
-["M","rogue","Misalignment: its goals are at odds with human survival."],["P","rogue","It gets enough power to act (money, infrastructure, copies of itself, lab control)."],
-["U","rogue","Nobody catches or corrects it in time."],["H","rogue","Its plan actually requires getting rid of humans."],["X","rogue","The attempt causes extinction rather than a survivable disaster."],
-["A","misuse","A group wanting mass casualties gets powerful AI."],["W","misuse","The AI hands them a species-ending weapon, such as an engineered pandemic."],["F","misuse","Defenses fail (biosecurity, monitoring, counter-AI)."]];
+const F=[["T","shared","Chance we build AI that beats humans at most tasks, in the time frame under consideration (shared).","Transformative capability"],
+["M","rogue","Its goals are at odds with human survival.","Misalignment"],["P","rogue","It gets enough power to act (money, infrastructure, copies of itself, lab control).","Power"],
+["U","rogue","Nobody catches or corrects it in time.","Uncaught"],["H","rogue","Its plan actually requires getting rid of humans (rather than working around us).","Hostile plan"],["X","rogue","The attempt causes extinction rather than a survivable disaster.","eXtinction"],
+["A","misuse","A group wanting mass casualties gets powerful AI.","Actor"],["W","misuse","The AI hands them a species-ending weapon, such as an engineered pandemic.","Weapon"],["F","misuse","Defenses fail (biosecurity, monitoring, counter-AI).","deFenses fail"]];
 const PR={opt:{T:.5,M:.1,P:.2,U:.2,H:.3,X:.2,A:.05,W:.05,F:.1},mid:{T:.7,M:.3,P:.3,U:.4,H:.5,X:.3,A:.1,W:.1,F:.2},pes:{T:.9,M:.8,P:.6,U:.8,H:.7,X:.6,A:.3,W:.3,F:.4}};
 const E6=(x)=>({T:x,M:x,P:x,U:x,H:x,X:x,A:0,W:0,F:0});
 const RP={
@@ -58,43 +59,43 @@ cite:"Grace, K., Sandkühler, J. F., Stewart, H., Weinstein-Raun, B., Thomas, S.
 url:"https://doi.org/10.1613/jair.1.19087",
 quote:"“What probability do you put on future AI advances causing human extinction or similarly permanent and severe disempowerment of the human species within the next 100 years?” Median answer 5% (mean 14.4%, n = 655; survey of 2,778 AI researchers, Oct 2023; table in arXiv:2401.02843).",
 frame:"Within the next 100 years (asked 2023). Includes “similarly permanent and severe disempowerment”, not only extinction.",
-map:"The study gives only a total and does not split rogue AI vs. misuse. Our assumption: the whole 5% is put on the rogue path (misuse factors set to 0), and the six rogue factors are set equal: 0.05^(1/6) ≈ 0.607 each, giving 5.0%. The split is ours, not the study's."},
+map:"The study gives only a total and does not split rogue AI vs. misuse. Our assumption: the whole 5% is put on the rogue path (misuse factors set to 0), and the six rogue factors are set equal: 0.05^(1/6) ≈ 0.607 each, giving 5.0%. The split is ours, not the study's; the per-factor values are mapping artifacts, not respondents' forecasts."},
 g18:{name:"ML researchers 2016 (Grace et al. 2018)",peer:true,v:{T:1,M:.5493,P:.5493,U:.5493,H:.5493,X:.5493,A:0,W:0,F:0},src:"5.0%",
 cite:"Grace, K., Salvatier, J., Dafoe, A., Zhang, B., & Evans, O. (2018). Viewpoint: When Will AI Exceed Human Performance? Evidence from AI Experts. Journal of Artificial Intelligence Research, 62, 729–754. doi:10.1613/jair.1.11222",
 url:"https://doi.org/10.1613/jair.1.11222",
 quote:"Asked to assume high-level machine intelligence (HLMI) will exist and to rate its long-run impact on humanity: “the probability was 10% for a bad outcome and 5% for an outcome described as ‘Extremely Bad (e.g., human extinction)’” (median, 352 researchers who published at NIPS and ICML 2015).",
 frame:"Conditional on HLMI being built at some point; “in the long run”, no date.",
-map:"Because the question assumes HLMI exists, f_T = 1. The study gives only a total for “extremely bad” outcomes, so we put it all on the rogue path (misuse = 0) and set the other five rogue factors equal: 0.05^(1/5) ≈ 0.549 each, giving 5.0%. The split is ours."},
+map:"Because the question assumes HLMI exists, f_T = 1. The study gives only a total for “extremely bad” outcomes, so we put it all on the rogue path (misuse = 0) and set the other five rogue factors equal: 0.05^(1/5) ≈ 0.549 each, giving 5.0%. The split is ours; per-factor values are mapping artifacts. This is a conditional probability (given HLMI), so it is not on the same scale as the unconditional presets."},
 xs:{name:"Superforecasters (XPT, Karger et al.)",peer:true,v:E6(.395),src:"0.38%",
 cite:"Karger, E., Rosenberg, J., Jacobs, Z., Hickman, M., & Tetlock, P. E. (2025). Subjective-probability forecasts of existential risk: Initial results from a hybrid persuasion-forecasting tournament. International Journal of Forecasting, 41(2), 499–516. doi:10.1016/j.ijforecast.2024.11.008. Number from the full report: Karger et al. (2023), Forecasting Existential Risks: Evidence from a Long-Run Forecasting Tournament, FRI Working Paper #1.",
 url:"https://forecastingresearch.org/pdf/existential-risk-persuasion-tournament.pdf",
-quote:"“What is the probability that artificial intelligence will cause human extinction or reduce the global population below 5,000?” By 2100, median superforecaster: 0.38% (95% CI 0.10–0.75%, n = 88).",
+quote:"“What is the probability that artificial intelligence will cause human extinction or reduce the global population below 5,000?” By 2100, median superforecaster: 0.38% (95% CI on the median 0.10–0.75%, n = 88; this is sampling uncertainty in the median, not the spread of forecasts).",
 frame:"By 2100 (forecasts made June–October 2022). Extinction = global population below 5,000.",
-map:"The tournament is published in a peer-reviewed journal (IJF 2025); the 0.38% figure is quoted from the FRI working paper and is restated in the peer-reviewed Grace et al. 2025 JAIR paper. Total only: all on the rogue path (misuse = 0), six rogue factors equal: 0.0038^(1/6) ≈ 0.395 each, giving 0.38%. The split is ours."},
+map:"The tournament is published in a peer-reviewed journal (IJF 2025); the 0.38% figure is quoted from the FRI working paper and is restated in the peer-reviewed Grace et al. 2025 JAIR paper. Total only: all on the rogue path (misuse = 0), six rogue factors equal: 0.0038^(1/6) ≈ 0.395 each, giving 0.38%. The split is ours; f_T = 0.395 is a mapping artifact, not the superforecasters' probability of powerful AI."},
 xe:{name:"AI domain experts (XPT, Karger et al.)",peer:true,v:E6(.5574),src:"3.0%",
 cite:"Karger, E., Rosenberg, J., Jacobs, Z., Hickman, M., & Tetlock, P. E. (2025). Subjective-probability forecasts of existential risk: Initial results from a hybrid persuasion-forecasting tournament. International Journal of Forecasting, 41(2), 499–516. doi:10.1016/j.ijforecast.2024.11.008. Number from the full report: Karger et al. (2023), FRI Working Paper #1.",
 url:"https://forecastingresearch.org/pdf/existential-risk-persuasion-tournament.pdf",
-quote:"Same question. By 2100, median AI domain expert: 3% (95% CI 0.49–10.00%).",
+quote:"Same question. By 2100, median AI domain expert: 3% (95% CI on the median 0.49–10.00%).",
 frame:"By 2100 (forecasts made June–October 2022). Extinction = global population below 5,000.",
-map:"Same status as the superforecaster preset. Total only: all on the rogue path (misuse = 0), six rogue factors equal: 0.03^(1/6) ≈ 0.557 each, giving 3.0%. The split is ours."},
+map:"Same status as the superforecaster preset. Total only: all on the rogue path (misuse = 0), six rogue factors equal: 0.03^(1/6) ≈ 0.557 each, giving 3.0%. The split is ours; per-factor values are mapping artifacts, not respondents' forecasts."},
 cs:{name:"Carlsmith 2022 (premise by premise)",peer:false,v:{T:.52,M:.4,P:.65,U:.4,H:1,X:.95,A:0,W:0,F:0},src:"~5% (product 5.1%)",
 cite:"Carlsmith, J. (2022). Is Power-Seeking AI an Existential Risk? arXiv:2206.13353 (Open Philanthropy report, 2021). Not peer reviewed.",
 url:"https://arxiv.org/abs/2206.13353",
-quote:"“Multiplying these conditional probabilities together, then, we get: 65%·80%·40%·65%·40%·95% = ~5% probability of existential catastrophe from misaligned, power-seeking AI by 2070.” (May 2022 note: the author's estimate has since risen to >10%.)",
+quote:"“Multiplying these conditional probabilities together, then, we get: 65%·80%·40%·65%·40%·95% = ~5% probability of existential catastrophe from misaligned, power-seeking AI by 2070.” (A May 2022 update note in the arXiv version says the author's estimate has since risen to >10%.)",
 frame:"By 2070. Existential catastrophe from misaligned power-seeking AI only (no misuse).",
-map:"Included because it gives per-factor numbers. f_T = 65% × 80% = 0.52 (APS systems become feasible, and there are strong incentives to build and deploy them); f_M = 0.40 (much harder to build aligned than misaligned-but-attractive systems); f_P = 0.65 (some deployed systems seek power in high-impact ways, >$1 trillion damage); f_U = 0.40 (this scales to permanent disempowerment of ~all humanity, i.e. it isn't stopped); f_H = 1 (no separate premise); f_X = 0.95 (the disempowerment is an existential catastrophe, which Carlsmith does not limit to extinction). Misuse is outside his argument, so it is set to 0. Product: 5.1%."}};
+map:"Included because it gives per-factor numbers; the mapping is approximate. f_T = 65% × 80% = 0.52 (APS systems become feasible, and there are strong incentives to build and deploy them; the deploy-incentive premise has no own factor and is folded into f_T, and APS systems are not the same threshold as “beats humans at most tasks”); f_M = 0.40 (much harder to build aligned than misaligned-but-attractive systems); f_P = 0.65 (some deployed systems seek power in high-impact ways, >$1 trillion damage); f_U = 0.40 (this scales to permanent disempowerment of ~all humanity, i.e. it isn't stopped); f_H = 1 (no separate premise); f_X = 0.95 (the disempowerment is an existential catastrophe, which Carlsmith does not limit to extinction). Misuse is outside his argument, so it is set to 0. Product: 5.1%."}};
 const rb=document.getElementById("rbtns");for(const id in RP){const b=document.createElement("button");b.dataset.p=id;b.innerHTML=RP[id].name+`<span class="tag">${RP[id].peer?"peer reviewed":"not peer reviewed"}</span>`;rb.appendChild(b);}
 const ALL={...PR,...RP};const vals=(id)=>RP[id]?RP[id].v:PR[id];
 function esc(t){return t.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"})[c]);}
 function showSrc(id){const sb=document.getElementById("srcbody");if(!id||!RP[id]){sb.innerHTML='<p class="small">Pick a research preset to see its citation, the quoted estimate and how we mapped it onto the factors. The illustrative presets have no source. All research presets: '+Object.values(RP).map(r=>`<a href="${r.url}">${esc(r.name)}</a>`).join(" · ")+'</p>';return;}
 const r=RP[id];sb.innerHTML=`<dl><dt>${esc(r.name)} <span class="tag">${r.peer?"peer reviewed":"not peer reviewed"}</span></dt><dt>Citation</dt><dd>${esc(r.cite)}</dd><dt>Link</dt><dd><a href="${r.url}">${r.url}</a></dd><dt>Estimate in the source</dt><dd>${esc(r.quote)}</dd><dt>Time frame and wording</dt><dd>${esc(r.frame)}</dd><dt>Source total</dt><dd>${esc(r.src)}</dd><dt>How we mapped it</dt><dd>${esc(r.map)}</dd></dl>`;}
-const el={};for(const[k,g,d]of F){const w=document.createElement("div");w.className="f";
-w.innerHTML=`<label for="f${k}"><span>f<sub>${k}</sub></span><span class="val" id="v${k}"></span></label><p>${d}</p><input type="range" id="f${k}" min="0" max="1" step="any">`;
+const el={};for(const[k,g,d,n]of F){const w=document.createElement("div");w.className="f";
+w.innerHTML=`<label for="f${k}"><span>f<sub>${k}</sub> · ${n}</span><span class="val" id="v${k}"></span></label><p>${d}</p><input type="range" id="f${k}" min="0" max="1" step="any">`;
 document.getElementById(g).appendChild(w);el[k]=w.querySelector("input");el[k].addEventListener("input",()=>upd(true));}
 function pct(p){const x=p*100;if(x>0&&x<0.01)return"<0.01%";if(x===0)return"0%";return(x<1?x.toFixed(2):x.toFixed(1))+"%";}
 function set(o){for(const k in o)el[k].value=o[k];upd(true);}
 function upd(url){const v={};for(const k in el){v[k]=+el[k].value;document.getElementById("v"+k).textContent=String(+v[k].toFixed(4));}
-const R=v.M*v.P*v.U*v.H*v.X,Mi=v.A*v.W*v.F,r=v.T*R,m=v.T*Mi,d=v.T*(1-(1-R)*(1-Mi));
+const R=v.M*v.P*v.U*v.H*v.X,S=v.A*v.W*v.F,r=v.T*R,m=v.T*S,d=v.T*(1-(1-R)*(1-S));
 pd.textContent=pct(d);pr.textContent=pct(r);pm.textContent=pct(m);
 odds.textContent=d>0?"about 1 in "+Math.round(1/d).toLocaleString():"essentially zero";
 br.style.width=(r*100)+"%";bm.style.width=(m*100)+"%";
