@@ -1,6 +1,6 @@
 # The Fleishman Equation
 
-A Drake-style estimate of the chance that AI wipes out humanity, split into a rogue-AI path and a human-misuse path. Single-file, no-build web calculator.
+An estimate of the chance that AI wipes out humanity, split into a rogue-AI path and a human-misuse path. Single-file, no-build web calculator.
 
 **Live:** https://leofle.github.io/fleishman-equation/
 
